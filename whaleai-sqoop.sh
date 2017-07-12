@@ -53,6 +53,9 @@ sudo mv  sqoop-$SQOOP_VERSION /opt/
 #配置sqoop的配置文件
 user=`whoami`
 sed -i "s|/etc/hadoop/conf/|$HADOOP_HOME/etc/hadoop|" $SQOOP_HOME/conf/sqoop.properties
+sed -i -e "s|@LOGDIR@|$HADOOP_HOME/whaleai/pids|" $SQOOP_HOME/conf/sqoop.properties
+sed -i -e "s|@BASEDIR@|$HADOOP_HOME/whaleai/pids|" $SQOOP_HOME/conf/sqoop.properties
+echo "sqoop-$SQOOP_VERSION　>>property变量配置完成 "
 put_config --file $HADOOP_HOME/etc/hadoop/mapred-site.xml --property mapreduce.jobhistory.address --value "localhost:10020"
 put_config --file $HADOOP_HOME/etc/hadoop/core-site.xml --property hadoop.proxyuser.$user.hosts --value "*"
 put_config --file $HADOOP_HOME/etc/hadoop/core-site.xml --property hadoop.proxyuser.$user.groups --value "*"
@@ -69,15 +72,15 @@ echo "
 sqoop-$SQOOP_VERSION　>>变量配置完成
  "
 echo "
-sqoop-$SQOOP_VERSION　>> 元数据库初始中...
+sqoop-$SQOOP_VERSION　>>元数据库初始中...
 "
 sqoop2-tool upgrade
 echo "
-sqoop-$SQOOP_VERSION　>> 初始完成
+sqoop-$SQOOP_VERSION　>>初始完成
 "
 sqoop2-tool verify
 echo "
-sqoop-$SQOOP_VERSION　>> 验证成功
+sqoop-$SQOOP_VERSION　>>验证成功
  "
 
 sqoop2-server start
